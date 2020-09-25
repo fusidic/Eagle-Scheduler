@@ -3,6 +3,7 @@ package eagle
 import (
 	"context"
 	"fmt"
+	"math"
 
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -28,6 +29,7 @@ var (
 	_ framework.PreFilterPlugin = &Eagle{}
 	_ framework.FilterPlugin    = &Eagle{}
 	_ framework.ScorePlugin     = &Eagle{}
+	_ framework.ScoreExtensions = &Eagle{}
 )
 
 // Args maintains basic args for running a scheduler.
@@ -110,5 +112,34 @@ func (e *Eagle) Score(ctx context.Context, state *framework.CycleState, pod *v1.
 
 // ScoreExtensions of the Score plugin.
 func (e *Eagle) ScoreExtensions() framework.ScoreExtensions {
+	return nil
+}
+
+// NormalizeScore list all scores of nodes and normalize them.
+// It's invoked after all nodes scored.
+func (e *Eagle) NormalizeScore(ctx context.Context, cycleState *framework.CycleState, pod *v1.Pod, scores framework.NodeScoreList) *framework.Status {
+	// Find highest and lowest scores.
+	var highest int64 = -math.MaxInt64
+	var lowest int64 = math.MaxInt64
+	for _, nodeScore := range scores {
+		if nodeScore.Score > highest {
+			highest = nodeScore.Score
+		}
+		if nodeScore.Score < lowest {
+			lowest = nodeScore.Score
+		}
+	}
+
+	// Transform the highest to lowest score range to fit the framework's min to max node score range.
+	oldRange := highest - lowest
+	newRange := framework.MaxNodeScore - framework.MinNodeScore
+	for i, nodeScore := range scores {
+		if oldRange == 0 {
+			scores[i].Score = framework.MinNodeScore
+		} else {
+			scores[i].Score = ((nodeScore.Score - lowest) * newRange / oldRange) + framework.MinNodeScore
+		}
+	}
+
 	return nil
 }

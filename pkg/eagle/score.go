@@ -42,13 +42,13 @@ func eagleResourceScorer() func(requested, allocable resourceToValueMap, include
 
 func fractionOfCapacity(requested, capacity int64) float64 {
 	if capacity == 0 {
-		return 1
+		return 0
 	}
 	return float64(requested) / float64(capacity)
 }
 
 func bias(a, b float64) float64 {
-	return math.Abs(b - a)
+	return 1 - math.Abs(b-a)
 }
 
 // By default, we think a less than b
