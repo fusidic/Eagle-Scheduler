@@ -21,4 +21,6 @@
 
 ### VS Code ###
 /.vscode/
-greedy-scheduler
+
+### Excute file ###
+*scheduler

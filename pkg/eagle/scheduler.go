@@ -28,7 +28,6 @@ var (
 	_ framework.PreFilterPlugin = &Eagle{}
 	_ framework.FilterPlugin    = &Eagle{}
 	_ framework.ScorePlugin     = &Eagle{}
-	_ framework.ScoreExtensions = &Eagle{}
 )
 
 // Args maintains basic args for running a scheduler.
@@ -109,13 +108,7 @@ func (e *Eagle) Score(ctx context.Context, state *framework.CycleState, pod *v1.
 	return e.score(pod, nodeInfo)
 }
 
-// ScoreExtensions is defined in interface ScorePlugin and
-// return a ScoreExtensions interafce if it has been implemented.
+// ScoreExtensions of the Score plugin.
 func (e *Eagle) ScoreExtensions() framework.ScoreExtensions {
-	return e
-}
-
-// NormalizeScore TODO
-func (e *Eagle) NormalizeScore(ctx context.Context, state *framework.CycleState, pod *v1.Pod, score framework.NodeScoreList) *framework.Status {
 	return nil
 }

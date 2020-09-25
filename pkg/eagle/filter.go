@@ -123,9 +123,9 @@ func fitsRequest(podRequest *preFilterState, nodeInfo *framework.NodeInfo) []Ins
 }
 
 func fitEagle(podRequest *preFilterState, nodeInfo *framework.NodeInfo) (string, bool) {
-	var cpuRatio, memRatio, y, x float32
-	cpuRatio = float32((podRequest.MilliCPU + nodeInfo.Requested.MilliCPU) / nodeInfo.Allocatable.MilliCPU)
-	memRatio = float32((podRequest.Memory + nodeInfo.Requested.Memory) / nodeInfo.Allocatable.Memory)
+	var cpuRatio, memRatio, y, x float64
+	cpuRatio = float64((podRequest.MilliCPU + nodeInfo.Requested.MilliCPU) / nodeInfo.Allocatable.MilliCPU)
+	memRatio = float64((podRequest.Memory + nodeInfo.Requested.Memory) / nodeInfo.Allocatable.Memory)
 	if cpuRatio > 1 || memRatio > 1 {
 		reason := "resource out of limit"
 		return reason, false
@@ -149,7 +149,7 @@ func fitEagle(podRequest *preFilterState, nodeInfo *framework.NodeInfo) (string,
 	return "Out of EAGLE bound", false
 }
 
-func getMinMax(a, b float32) (float32, float32) {
+func getMinMax(a, b float64) (float64, float64) {
 	if a > b {
 		return b, a
 	} else if a < b {
@@ -158,7 +158,7 @@ func getMinMax(a, b float32) (float32, float32) {
 	return a, b
 }
 
-func distanceToR0(x, y float32) bool {
+func distanceToR0(x, y float64) bool {
 	distance := (x-R0)*(x-R0) + (y-1+R0)*(y-1+R0)
 	if distance <= R0*R0 {
 		return true
