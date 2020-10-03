@@ -50,9 +50,15 @@ spec:
         - name: scheduler-config
           configMap:
             name: scheduler-config
+      nodeSelector:
+        dedicated: master
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
       containers:
         - name: eagle-scheduler
-          image: fusidic/eagle-scheduler:0.1
+          image: fusidic/eagle-scheduler:0.3
           imagePullPolicy: IfNotPresent
           args:
             - eagle-scheduler
