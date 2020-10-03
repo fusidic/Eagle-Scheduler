@@ -34,6 +34,6 @@ replace (
 	k8s.io/kubernetes => /root/workspace/kubernetes
 	k8s.io/legacy-cloud-providers => /root/workspace/kubernetes/staging/src/k8s.io/legacy-cloud-providers
 	k8s.io/metrics => /root/workspace/kubernetes/staging/src/k8s.io/metrics
+	k8s.io/mount-utils => /root/workspace/kubernetes/staging/src/k8s.io/mount-utils
 	k8s.io/sample-apiserver => /root/workspace/kubernetes/staging/src/k8s.io/sample-apiserver
-
 )

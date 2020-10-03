@@ -22,7 +22,7 @@ func eagleResourceScorer() func(requested, allocable resourceToValueMap, include
 		// Potential indicates the difference while nodes get same bias value.
 
 		var x, y, potentialValue float64
-		biasValue := bias(cpuFraction, memFraction) * float64(framework.MaxNodeScore)
+		biasValue := bias(cpuFraction, memFraction)
 
 		if cpuFraction > memFraction {
 			y = cpuFraction
@@ -36,7 +36,12 @@ func eagleResourceScorer() func(requested, allocable resourceToValueMap, include
 			potentialValue = 1
 		}
 
-		return int64((normalization(biasValue, potentialValue) * float64(framework.MaxNodeScore)))
+		finalScore := normalization(biasValue, potentialValue)
+		if finalScore > 1 {
+			finalScore = 1
+		}
+
+		return int64(finalScore * float64(framework.MaxNodeScore))
 	}
 }
 
