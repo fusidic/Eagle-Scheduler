@@ -47,7 +47,7 @@ func (r *resourceAllocationScorer) score(pod *v1.Pod, nodeInfo *framework.NodeIn
 	}
 	var score int64
 
-	//TODO: Check if the pod ahs volumes and this could be added to scorer function for balanced resource allocation.
+	//TODO: Check if the pod has volumes and this could be added to scorer function for balanced resource allocation.
 	score = r.scorer(requested, allocatable, false, 0, 0)
 	if klog.V(10).Enabled() {
 		klog.Infof(

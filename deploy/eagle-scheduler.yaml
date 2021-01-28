@@ -58,7 +58,7 @@ spec:
         effect: NoSchedule
       containers:
         - name: eagle-scheduler
-          image: fusidic/eagle-scheduler:0.3
+          image: fusidic/eagle-scheduler:v0.1
           imagePullPolicy: IfNotPresent
           args:
             - eagle-scheduler

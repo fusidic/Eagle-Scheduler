@@ -10,9 +10,10 @@ import (
 )
 
 const (
-	// const variable for eagle bound.
+	// R0 ...
+	// r0 ...
 	R0 = 0.8
-	r0 = 0.1
+	r0 = 0.9
 )
 
 // preFilterState is computed at PreFilter and used at Filter.

@@ -12,14 +12,14 @@ func eagleResourceScorer() func(requested, allocable resourceToValueMap, include
 		cpuFraction := fractionOfCapacity(requested[v1.ResourceCPU], allocable[v1.ResourceCPU])
 		memFraction := fractionOfCapacity(requested[v1.ResourceMemory], allocable[v1.ResourceMemory])
 
-		// // didn't the influence of r0
+		// // didn't take r0 into consideration
 		// if ((cpuFraction - 1) * (cpuFraction - 1) + (memFraction - 1) * (memFraction - 1)) < 0.01 {
 		// 	return framework.MaxNodeScore
 		// }
 
 		// We take two models into account to evaluate the score.
 		// Bias can describe the bias with with equal CPU/MEM resource requested.
-		// Potential indicates the difference while nodes get same bias value.
+		// Potential indicates the difference between nodes with same bias value.
 
 		var x, y, potentialValue float64
 		biasValue := bias(cpuFraction, memFraction)
@@ -39,6 +39,10 @@ func eagleResourceScorer() func(requested, allocable resourceToValueMap, include
 		finalScore := normalization(biasValue, potentialValue)
 		if finalScore > 1 {
 			finalScore = 1
+		}
+
+		if finalScore < 0 {
+			finalScore = 0
 		}
 
 		return int64(finalScore * float64(framework.MaxNodeScore))
